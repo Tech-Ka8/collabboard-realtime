@@ -5,22 +5,25 @@ import { projectAPI, cardAPI } from '../../services/api';
 import toast from 'react-hot-toast';
 
 export default function KanbanBoard({ board, projectId, members, socket }) {
-  const [cards, setCards] = useState([]);
-  const [loading, setLoading] = useState(true);
+
+const [cards, setCards] = useState([]);
+const [loadedBoardId, setLoadedBoardId] = useState(null);
+
+const boardId = board?._id;
+const loading = Boolean(boardId) && loadedBoardId !== boardId;
+
+useEffect(() => {
+  if (!boardId) return;
+
+  projectAPI.getCards(projectId, boardId)
+    .then(({ data }) => setCards(data))
+    .catch(() => toast.error('Failed to load cards'))
+    .finally(() => setLoadedBoardId(boardId));
+}, [boardId, projectId]);
 
   useEffect(() => {
-    if (!board) return;
-    setLoading(true);
-    projectAPI.getCards(projectId, board._id)
-      .then(({ data }) => setCards(data))
-      .catch(() => toast.error('Failed to load cards'))
-      .finally(() => setLoading(false));
-  }, [board?._id, projectId]);
-
-  useEffect(() => {
-    if (!socket || !board) return;
-
-    socket.emit('board:join', { boardId: board._id, user: { name: 'teammate' } });
+if (!socket || !boardId) return;
+    socket.emit('board:join', { boardId, user: { name: 'teammate' } });
 
     const onMoved = ({ cardId, status, order }) =>
       setCards(prev => prev.map(c => c._id === cardId ? { ...c, status, order } : c));
@@ -42,14 +45,14 @@ export default function KanbanBoard({ board, projectId, members, socket }) {
     socket.on('user:joined', onJoined);
 
     return () => {
-      socket.emit('board:leave', { boardId: board._id });
+      socket.emit('board:leave', { boardId });
       socket.off('card:moved', onMoved);
       socket.off('card:updated', onUpdated);
       socket.off('card:created', onCreated);
       socket.off('card:deleted', onDeleted);
       socket.off('user:joined', onJoined);
     };
-  }, [socket, board?._id]);
+}, [socket, boardId]);
 
   const onDragEnd = useCallback(async (result) => {
     const { destination, source, draggableId } = result;
@@ -67,11 +70,11 @@ export default function KanbanBoard({ board, projectId, members, socket }) {
 
     try {
       await cardAPI.update(draggableId, { status: newStatus, order: destination.index });
-      if (socket) socket.emit('card:move', { boardId: board._id, cardId: draggableId, status: newStatus, order: destination.index });
+      if (socket) socket.emit('card:move', { boardId, cardId: draggableId, status: newStatus, order: destination.index });
     } catch {
       toast.error('Failed to move card');
     }
-  }, [socket, board?._id]);
+  }, [socket, boardId]);
 
   const handleCardCreate = (card) => setCards(prev => [...prev, card]);
   const handleCardUpdate = (updated) => setCards(prev => prev.map(c => c._id === updated._id ? updated : c));

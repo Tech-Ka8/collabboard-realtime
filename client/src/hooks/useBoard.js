@@ -20,7 +20,7 @@ export const useBoard = (projectId, boardId) => {
       setLoading(true);
       const { data } = await projectAPI.getCards(projectId, boardId);
       setCards(data);
-    } catch (err) {
+    } catch {
       toast.error('Failed to load cards');
     } finally {
       setLoading(false);
@@ -83,7 +83,7 @@ export const useBoard = (projectId, boardId) => {
       setCards(prev => prev.map(c => c._id === cardId ? data : c));
       socket?.emit('card:update', { boardId, cardId, updates: data });
       return data;
-    } catch (err) {
+    } catch  {
       toast.error('Failed to update card');
     }
   }, [boardId, socket]);

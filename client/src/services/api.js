@@ -43,7 +43,7 @@ api.interceptors.response.use(
       localStorage.removeItem("token");
       localStorage.removeItem("user");
 
-      const message = err.response?.data?.message || "";
+    
       // Show session expired message only once
       if (!window.sessionExpiredShown) {
         window.sessionExpiredShown = true;

@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { projectAPI } from '../services/api';
-import { useAuth } from '../context/AuthContext';
-import { useSocket } from '../context/SocketContext';
+import { useAuth } from '../context/useAuth';
+import { useSocket } from '../context/useSocket';
 import KanbanBoard from '../components/Board/KanbanBoard';
 import ConfirmDialog from '../components/UI/ConfirmDialog';
 import NotFoundPage from './NotFoundPage';
@@ -97,7 +97,7 @@ export default function ProjectView() {
         }
       })
       .finally(() => setLoading(false));
-  }, [id]);
+  }, [id, navigate]);
 
   const deleteProject = async () => {
     setDeleting(true);

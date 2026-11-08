@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { projectAPI } from '../services/api';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../context/useAuth';
 import { Plus, FolderKanban, Users, Calendar } from 'lucide-react';
 import { ProjectCardSkeleton } from '../components/UI/SkeletonLoader';
 import toast from 'react-hot-toast';

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { projectAPI } from '../services/api';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../context/useAuth';
 import Navbar from '../components/Layout/Navbar';
 import KanbanBoard from '../components/Board/KanbanBoard';
 import { ArrowLeft, UserPlus, X } from 'lucide-react';

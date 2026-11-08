@@ -5,7 +5,7 @@ import KanbanCard from './KanbanCard';
 import { cardAPI } from '../../services/api';
 import toast from 'react-hot-toast';
 
-export default function Column({ column, cards, members, boardId, projectId, onCardCreate, onCardUpdate, onCardDelete, socket }) {
+export default function Column({ column, cards, members, boardId, onCardCreate, onCardUpdate, onCardDelete, socket }) {
   const [adding, setAdding] = useState(false);
   const [title, setTitle] = useState('');
   const [loading, setLoading] = useState(false);

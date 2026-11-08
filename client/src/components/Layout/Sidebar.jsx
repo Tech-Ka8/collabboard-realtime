@@ -1,6 +1,6 @@
 import { NavLink, useNavigate } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext';
-import { useSocket } from '../../context/SocketContext';
+import { useAuth } from '../../context/useAuth';
+import { useSocket } from '../../context/useSocket';
 import { LayoutDashboard, FolderKanban, LogOut, Wifi, WifiOff } from 'lucide-react';
 import toast from 'react-hot-toast';
 
