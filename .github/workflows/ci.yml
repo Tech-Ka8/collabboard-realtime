@@ -31,3 +31,5 @@ jobs:
       - name: Check backend JavaScript syntax
         run: find . -type f -name "*.js" -not -path "./node_modules/*" -exec node --check {} \;
         working-directory: ./server
+      - name: Build Docker image
+        run: docker build -t collabboard:ci .
